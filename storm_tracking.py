@@ -15,12 +15,18 @@ import glob
 # Automated storm tracking
 #
 
-suite = 'u-bd483'
+model_data = True
 
-# Load in detected positions and date/hour information
-filename = '/home/oliver/data/stormTracking/20CR/storm_det_slp'
+if model_data:
 
-filenames = sorted(glob.glob('/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+suite+'/'+suite+'-storm_det_slp*'))
+    suite = 'u-bd483'
+
+    # Load in detected positions and date/hour information
+    filenames = sorted(glob.glob('/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+suite+'/'+suite+'-storm_det_slp*'))
+
+else:
+
+    filenames = sorted(glob.glob('/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/'storm_det_slp*'))
 
 firstiteration = True
 
@@ -68,5 +74,9 @@ for ed in range(len(storms)):
 storms = storm.strip_storms(storms, dt=6, d_tot_min=0., d_ratio=0., dur_min=12)
 
 # Save tracked storm data
-np.savez('/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+suite+'/'+suite+'-storm_track_slp', storms=storms)
+
+if model_data:
+    np.savez('/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+suite+'/'+suite+'-storm_track_slp', storms=storms)
+else:
+    np.savez('/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/'storm_track_slp', storms=storms)
 
