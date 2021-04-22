@@ -14,6 +14,8 @@
 #SBATCH --ntasks=1
 #SBATCH --array=1950-2014
 
+rm storm_detection.{out,err}
+
 export PATH=/nesi/nobackup/niwa00013/williamsjh/miniconda3/bin:$PATH
 
 source activate master

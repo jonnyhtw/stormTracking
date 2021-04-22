@@ -1,0 +1,29 @@
+To use this for UM data:
+
+1- Get the *a.pc* data, which should be 6 hourly.
+2- Convert to NetCDF...
+
+> module load Mule
+
+>>> import iris
+>>> import glob
+>>> 
+>>> files = sorted(glob.glob('*.pp'))
+>>> 
+>>> for file in files:
+>>>     print(file[:-3])
+>>>     iris.save(iris.load_cube(file), file[:-3]+'.nc')
+
+3- Regrid to NCEP/NCAR grid, for example...
+
+cdo remapbil,/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/prmsl.2014.nc bb075a.pc19540101.nc regrid-bb075a.pc19540101.nc
+
+4- Combine seasonal files, for example...
+
+> for year in {1950..2014}; do echo $year ; cdo cat regrid-bd483a.pc${year}0101.nc regrid-bd483a.pc${year}0401.nc regrid-bd483a.pc${year}0701.nc regrid-bd483a.pc${year}1001.nc regrid-bd483a.pc${year}.nc ; done
+
+5- Delete constiuent, intermediate seasonal NetCDF files since they can be easily and quickly recreated. For example...
+
+> rm regrid-bd483a.pc????????.nc bd483a.pc*.nc
+
+6- Run storm_detection.sl to parallelise the storm detection for each year.
