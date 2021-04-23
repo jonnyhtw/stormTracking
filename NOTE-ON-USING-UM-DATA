@@ -1,7 +1,21 @@
 To use this for UM data:
 
 1- Get the *a.pc* data, which should be 6 hourly.
-2- Convert to NetCDF...
+
+2- Extract from tar archive if need be (the ampersand tells all the processes to be done at the same time)...
+
+> for file in *.tar ; do echo $file ; tar -xvf $file --wildcards \*a.pc\*.pp & done
+
+3- use mule-select to get field 16222 if necessary.
+
+> for file in *a.pc*.pp ; do mule-select $file STASH-16222-$file --include lbuser4=16222 ; done
+
+4- Move to /nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/[suite ID] and rename them back to their original names...
+
+> rename STASH-16222-[suite ID] [SUITE ID] STASH-16222*
+
+
+5- Convert to NetCDF...
 
 > module load Mule
 
@@ -14,16 +28,16 @@ To use this for UM data:
 >>>     print(file[:-3])
 >>>     iris.save(iris.load_cube(file), file[:-3]+'.nc')
 
-3- Regrid to NCEP/NCAR grid, for example...
+6- Regrid to NCEP/NCAR grid, for example...
 
 cdo remapbil,/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/prmsl.2014.nc bb075a.pc19540101.nc regrid-bb075a.pc19540101.nc
 
-4- Combine seasonal files, for example...
+7- Combine seasonal files, for example...
 
 > for year in {1950..2014}; do echo $year ; cdo cat regrid-bd483a.pc${year}0101.nc regrid-bd483a.pc${year}0401.nc regrid-bd483a.pc${year}0701.nc regrid-bd483a.pc${year}1001.nc regrid-bd483a.pc${year}.nc ; done
 
-5- Delete constiuent, intermediate seasonal NetCDF files since they can be easily and quickly recreated. For example...
+8- Delete constiuent, intermediate seasonal NetCDF files since they can be easily and quickly recreated. For example...
 
 > rm regrid-bd483a.pc????????.nc bd483a.pc*.nc
 
-6- Run storm_detection.sl to parallelise the storm detection for each year.
+9- Run storm_detection.sl to parallelise the storm detection for each year.

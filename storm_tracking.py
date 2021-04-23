@@ -15,7 +15,7 @@ import glob
 # Automated storm tracking
 #
 
-model_data = True
+model_data = False
 
 if model_data:
 
@@ -26,7 +26,7 @@ if model_data:
 
 else:
 
-    filenames = sorted(glob.glob('/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/'storm_det_slp*'))
+    filenames = sorted(glob.glob('/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/storm_det_slp*'))
 
 firstiteration = True
 
@@ -71,12 +71,12 @@ for ed in range(len(storms)):
     storms[ed]['age'] = len(storms[ed]['lon'])
 
 # Strip storms based on track lengths
-storms = storm.strip_storms(storms, dt=6, d_tot_min=0., d_ratio=0., dur_min=12)
+storms = storm.strip_storms(storms, dt=6, d_tot_min=0., d_ratio=0., dur_min=0)
 
 # Save tracked storm data
 
 if model_data:
     np.savez('/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+suite+'/'+suite+'-storm_track_slp', storms=storms)
 else:
-    np.savez('/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/'storm_track_slp', storms=storms)
+    np.savez('/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/storm_track_slp', storms=storms)
 
