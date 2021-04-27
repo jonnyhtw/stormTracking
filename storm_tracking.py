@@ -15,11 +15,11 @@ import glob
 # Automated storm tracking
 #
 
-model_data = False
+model_data = True
 
 if model_data:
 
-    suite = 'u-bd483'
+    suite = 'u-bo721'
 
     # Load in detected positions and date/hour information
     filenames = sorted(glob.glob('/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+suite+'/'+suite+'-storm_det_slp*'))
