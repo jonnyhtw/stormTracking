@@ -10,6 +10,14 @@
 import numpy as np
 import storm_functions as storm
 import glob
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--startyear', required=True, type=int)
+
+args = parser.parse_args()
+startyear=args.startyear
+print('startyear = ', startyear)
 
 #
 # Automated storm tracking
@@ -22,7 +30,7 @@ if model_data:
     suite = 'u-bo721'
 
     # Load in detected positions and date/hour information
-    filenames = sorted(glob.glob('/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+suite+'/'+suite+'-storm_det_slp*'))
+    filenames = sorted(glob.glob('/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+suite+'/'+suite+'-storm_det_slp*'+str(startyear)+'*'))
 
 else:
 
@@ -71,12 +79,12 @@ for ed in range(len(storms)):
     storms[ed]['age'] = len(storms[ed]['lon'])
 
 # Strip storms based on track lengths
-storms = storm.strip_storms(storms, dt=6, d_tot_min=0., d_ratio=0., dur_min=0)
+storms = storm.strip_storms(storms, dt=6, d_tot_min=0., d_ratio=0., dur_min=12)
 
 # Save tracked storm data
 
 if model_data:
-    np.savez('/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+suite+'/'+suite+'-storm_track_slp', storms=storms)
+    np.savez('/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+suite+'/'+suite+'-storm_track_slp'+'_'+str(startyear), storms=storms)
 else:
     np.savez('/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/storm_track_slp', storms=storms)
 
