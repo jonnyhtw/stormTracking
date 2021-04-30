@@ -24,13 +24,22 @@ print('startyear = ', startyear)
 #
 
 model_data = True
+nzesm = False
 
 if model_data:
 
-    suite = 'u-bo721'
+    if nzesm:
+        suite = 'u-bo721'
 
-    # Load in detected positions and date/hour information
-    filenames = sorted(glob.glob('/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+suite+'/'+suite+'-storm_det_slp*'+str(startyear)+'*'))
+        # Load in detected positions and date/hour information
+        filenames = sorted(glob.glob('/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+suite+'/'+suite+'-storm_det_slp*'+str(startyear)+'*'))
+
+    else:#ukesm
+        suite = 'u-bc179'
+
+        # Load in detected positions and date/hour information
+        filenames = sorted(glob.glob('/nesi/project/niwa00013/williamsjh/MASS/'+suite+'/apc.pp/m01s16i222/'+suite+'-storm_det_slp*'+str(startyear)+'*'))
+
 
 else:
 

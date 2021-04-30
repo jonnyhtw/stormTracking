@@ -38,8 +38,6 @@ cdo remapbil,/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/pr
 > regrid-bd483a.pc${year}0101.nc regrid-bd483a.pc${year}0401.nc
 > regrid-bd483a.pc${year}0701.nc regrid-bd483a.pc${year}1001.nc regrid-bd483a.pc${year}.nc ; done
 
-8- Delete constiuent, intermediate seasonal NetCDF files since they can be easily and quickly recreated. For example...
-
-> rm regrid-bd483a.pc????????.nc rm *.pp
+8- Delete constiuent, intermediate seasonal NetCDF files since they can be easily and quickly recreated.
 
 9- Run storm_detection.sl to parallelise the storm detection for each year.

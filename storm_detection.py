@@ -32,17 +32,17 @@ print('startyear = ', startyear)
 model_data = True
 
 if model_data:
-    dataset = 'u-bx226'
+    dataset = 'u-bc179'
 else:
     dataset = 'NCEP_20CRV2C'
 
 # Parameters
-pathroot = {'NCEP_20CRV2C': '/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/', 'u-bl658': '/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/u-bl658/','u-bb075': '/nesi/project/niwa00013/williamsjh/MASS/u-bb075/apc.pp/m01s16i222/','u-bd483': '/nesi/project/niwa00013/williamsjh/MASS/u-bd483/apc.pp/m01s16i222/','u-bf656': '/nesi/project/niwa00013/williamsjh/MASS/u-bf656/apc.pp/m01s16i222/','u-bo721': '/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/u-bo721/','u-bx226': '/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/u-bx226/'}
-var = {'NCEP_20CRV2C': 'prmsl', 'u-bl658': 'air_pressure_at_sea_level', 'u-bb075': 'air_pressure_at_sea_level', 'u-bd483': 'air_pressure_at_sea_level', 'u-bf656': 'air_pressure_at_sea_level',  'u-bo721': 'air_pressure_at_sea_level',  'u-bx226': 'air_pressure_at_sea_level'}
+pathroot = {'NCEP_20CRV2C': '/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/', 'u-bl658': '/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/u-bl658/','u-bb075': '/nesi/project/niwa00013/williamsjh/MASS/u-bb075/apc.pp/m01s16i222/','u-bd483': '/nesi/project/niwa00013/williamsjh/MASS/u-bd483/apc.pp/m01s16i222/','u-bf656': '/nesi/project/niwa00013/williamsjh/MASS/u-bf656/apc.pp/m01s16i222/','u-bc179': '/nesi/project/niwa00013/williamsjh/MASS/u-bc179/apc.pp/m01s16i222/','u-bo721': '/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/u-bo721/','u-bx226': '/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/u-bx226/'}
+var = {'NCEP_20CRV2C': 'prmsl', 'u-bl658': 'air_pressure_at_sea_level', 'u-bb075': 'air_pressure_at_sea_level', 'u-bd483': 'air_pressure_at_sea_level', 'u-bf656': 'air_pressure_at_sea_level',  'u-bo721': 'air_pressure_at_sea_level',  'u-bx226': 'air_pressure_at_sea_level',  'u-bc179': 'air_pressure_at_sea_level'}
 
 # Generate date and hour vectors
-yearStart = {'NCEP_20CRV2C': startyear,  'u-bl658': startyear, 'u-bb075': startyear, 'u-bd483': startyear, 'u-bf656': startyear, 'u-bo721': startyear, 'u-bx226': startyear}
-yearEnd = {'NCEP_20CRV2C': startyear,  'u-bl658': startyear, 'u-bb075': startyear, 'u-bd483': startyear, 'u-bf656': startyear, 'u-bo721': startyear, 'u-bx226': startyear}
+yearStart = {'NCEP_20CRV2C': startyear,  'u-bl658': startyear, 'u-bb075': startyear, 'u-bd483': startyear, 'u-bf656': startyear, 'u-bo721': startyear, 'u-bx226': startyear, 'u-bc179': startyear}
+yearEnd = {'NCEP_20CRV2C': startyear,  'u-bl658': startyear, 'u-bb075': startyear, 'u-bd483': startyear, 'u-bf656': startyear, 'u-bo721': startyear, 'u-bx226': startyear, 'u-bc179': startyear}
 
 # Load lat, lon
 filename = {'NCEP_20CRV2C': pathroot['NCEP_20CRV2C'] + 'prmsl.' + str(yearStart['NCEP_20CRV2C']) + '.nc',
@@ -51,6 +51,7 @@ filename = {'NCEP_20CRV2C': pathroot['NCEP_20CRV2C'] + 'prmsl.' + str(yearStart[
             'u-bx226': pathroot['u-bx226'] + 'regrid-bx226a.pc' + str(yearStart['u-bx226']) + '.nc',
             'u-bb075': pathroot['u-bb075'] + 'regrid-bb075a.pc' + str(yearStart['u-bb075']) + '.nc',
             'u-bf656': pathroot['u-bf656'] + 'regrid-bf656a.pc' + str(yearStart['u-bf656']) + '.nc',
+            'u-bc179': pathroot['u-bc179'] + 'regrid-bc179a.pc' + str(yearStart['u-bc179']) + '.nc',
             'u-bd483': pathroot['u-bd483'] + 'regrid-bd483a.pc' + str(yearStart['u-bd483']) + '.nc' }
 fileobj = Dataset(filename[dataset], 'r')
 lon = fileobj.variables['lon'][:].astype(float)
@@ -72,6 +73,7 @@ for yr in range(yearStart[dataset], yearEnd[dataset]+1):
                     'u-bx226': pathroot['u-bx226'] + 'regrid-bx226a.pc' + str(yearStart['u-bx226']) + '.nc',
                     'u-bb075': pathroot['u-bb075'] + 'regrid-bb075a.pc' + str(yearStart['u-bb075']) + '.nc',
                     'u-bf656': pathroot['u-bf656'] + 'regrid-bf656a.pc' + str(yearStart['u-bf656']) + '.nc',
+                    'u-bc179': pathroot['u-bc179'] + 'regrid-bc179a.pc' + str(yearStart['u-bc179']) + '.nc',
                     'u-bd483': pathroot['u-bd483'] + 'regrid-bd483a.pc' + str(yearStart['u-bd483']) + '.nc'}
 
         fileobj = Dataset(filename[dataset], 'r')
