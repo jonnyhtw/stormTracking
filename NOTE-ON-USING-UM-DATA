@@ -41,3 +41,5 @@ cdo remapbil,/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/pr
 8- Delete constituent, intermediate seasonal NetCDF files since they can be easily and quickly recreated.
 
 9- Run storm_detection.sl to parallelise the storm detection for each year.
+
+10- Run storm_tracking.sl to parallelise the storm tracking for each year.
