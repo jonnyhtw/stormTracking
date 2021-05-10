@@ -22,7 +22,7 @@ To use this for UM data:
 >>> import iris
 >>> import glob
 >>> 
->>> files = sorted(glob.glob('*.pp'))
+>>> files = sorted(glob.glob('STASH*.pp'))
 >>> 
 >>> for file in files:
 >>>     print(file[:-3])
