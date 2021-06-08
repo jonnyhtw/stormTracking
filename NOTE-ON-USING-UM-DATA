@@ -22,7 +22,7 @@ To use this for UM data:
 >>> import iris
 >>> import glob
 >>> 
->>> files = sorted(glob.glob('STASH*.pp'))
+>>> files = sorted(glob.glob('./bm456a.pc*.pp'))# for example
 >>> 
 >>> for file in files:
 >>>     print(file[:-3])
@@ -30,13 +30,14 @@ To use this for UM data:
 
 6- Regrid to NCEP/NCAR grid, for example...
 
-cdo remapbil,/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/prmsl.2014.nc bb075a.pc19540101.nc regrid-bb075a.pc19540101.nc
+for file in bb075a.pc*.nc ; do cdo remapbil,/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/prmsl.2014.nc $file regrid-$file ; done
 
 7- Combine seasonal files, for example...
 
+export suite=bm456
 > for year in {1950..2014}; do echo $year ; cdo cat
-> regrid-bd483a.pc${year}0101.nc regrid-bd483a.pc${year}0401.nc
-> regrid-bd483a.pc${year}0701.nc regrid-bd483a.pc${year}1001.nc regrid-bd483a.pc${year}.nc ; done
+> regrid-${suite}a.pc${year}0101.nc regrid-${suite}a.pc${year}0401.nc
+> regrid-${suite}a.pc${year}0701.nc regrid-${suite}a.pc${year}1001.nc regrid-${suite}a.pc${year}.nc ; done
 
 8- Delete constituent, intermediate seasonal NetCDF files since they can be easily and quickly recreated.
 
