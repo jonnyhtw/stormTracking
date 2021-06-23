@@ -27,7 +27,7 @@ model_data = True
 
 if model_data:
 
-    suite = 'u-bm456'
+    suite = 'u-bl274'
     
     # Load in detected positions and date/hour information
     filenames = sorted(glob.glob('/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+suite+'/'+suite+'-storm_det_slp*'+str(startyear)+'*'))

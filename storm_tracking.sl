@@ -12,7 +12,7 @@
 ##SBATCH --mem-per-cpu=200G
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --array=1950-2014
+#SBATCH --array=2009-2014
 
 rm storm_tracking.{out,err}
 
