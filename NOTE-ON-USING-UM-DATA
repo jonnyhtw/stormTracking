@@ -39,8 +39,8 @@ export suite=bm456
 > regrid-${suite}a.pc${year}0101.nc regrid-${suite}a.pc${year}0401.nc
 > regrid-${suite}a.pc${year}0701.nc regrid-${suite}a.pc${year}1001.nc regrid-${suite}a.pc${year}.nc ; done
 
-8- Delete constituent, intermediate seasonal NetCDF files since they can be easily and quickly recreated.
+8- Delete .pp files in /nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/[suite ID] and constituent, intermediate seasonal NetCDF files since they can be easily and quickly recreated.
 
-9- Run storm_detection.sl to parallelise the storm detection for each year.
+9- Edit storm_detection.py if need be and run storm_detection.sl to parallelise the storm detection for each year.
 
-10- Run storm_tracking.sl to parallelise the storm tracking for each year.
+10- Edit storm_tracking.py if need be and run storm_tracking.sl to parallelise the storm tracking for each year.
