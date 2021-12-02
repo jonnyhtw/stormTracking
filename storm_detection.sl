@@ -12,16 +12,15 @@
 ##SBATCH --mem-per-cpu=200G
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --array=2080-2099
+#SBATCH --array=1950-2014
 
-rm storm_detection.{out,err}
+#rm storm_detection.{out,err}
 
 export PATH=/nesi/nobackup/niwa00013/williamsjh/miniconda3/bin:$PATH
 
 source activate master
- 
-echo storm_det_slp_${SLURM_ARRAY_TASK_ID}.npz
 
-#rm -f storm_det_slp_${SLURM_ARRAY_TASK_ID}.npz
+export suite='u-bb277'
+mkdir -p /nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/$suite
 
-/nesi/nobackup/niwa00013/williamsjh/miniconda3/envs/master/bin/python  -u storm_detection.py --startyear=$SLURM_ARRAY_TASK_ID
+/nesi/nobackup/niwa00013/williamsjh/miniconda3/envs/master/bin/python  -u storm_detection.py --startyear=$SLURM_ARRAY_TASK_ID --dataset=$suite

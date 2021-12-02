@@ -14,10 +14,12 @@ To use this for UM data:
 
 > rename STASH-16222-[suite ID] [SUITE ID] STASH-16222*
 
+***If using data from MASS extracted using moo select...' then start from here***
 
 5- Convert to NetCDF...
 
 > module load Mule
+> ipython
 
 >>> import iris
 >>> import glob
@@ -30,7 +32,7 @@ To use this for UM data:
 
 6- Regrid to NCEP/NCAR grid, for example...
 
-for file in bb075a.pc*.nc ; do cdo remapbil,/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/prmsl.2014.nc $file regrid-$file ; done
+for file in ?????a.pc*.nc ; do cdo remapbil,/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/prmsl.2014.nc $file regrid-$file ; done
 
 7- Combine seasonal files, for example...
 
@@ -39,8 +41,10 @@ export suite=bm456
 > regrid-${suite}a.pc${year}0101.nc regrid-${suite}a.pc${year}0401.nc
 > regrid-${suite}a.pc${year}0701.nc regrid-${suite}a.pc${year}1001.nc regrid-${suite}a.pc${year}.nc ; done
 
-8- Delete .pp files in /nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/[suite ID] and constituent, intermediate seasonal NetCDF files since they can be easily and quickly recreated.
+8- Delete .pp files in /nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/[suite ID] and constituent, intermediate seasonal NetCDF files since they can be easily and quickly recreated...
 
-9- Edit storm_detection.py if need be and run storm_detection.sl to parallelise the storm detection for each year.
+> rm {*.pp,*pc????????.nc}
 
-10- Edit storm_tracking.py if need be and run storm_tracking.sl to parallelise the storm tracking for each year.
+9- Run storm_detection.sl to parallelise the storm detection for each year.
+
+10- Run storm_tracking.sl to parallelise the storm tracking for each year.

@@ -21,10 +21,17 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--startyear', required=True, type=int)
+parser.add_argument('--dataset', required=True, type=str)
 
 args = parser.parse_args()
+
 startyear=args.startyear
 print('startyear = ', startyear)
+
+dataset=args.dataset
+print('dataset = ', dataset)
+
+
 
 #
 # Load in slp data and lat/lon coordinates
@@ -32,33 +39,31 @@ print('startyear = ', startyear)
 model_data = True
 
 if model_data:
-    dataset = 'u-bn013'
+        if dataset in ['u-bc179', 'u-bc292', 'u-bc370', 'u-bb075', 'u-az513', 'u-az515', 'u-az524', 'u-bb277', 'u-bc470', 'u-bd288', 'u-bd416', 'u-bd483', 'u-bf647', 'u-bf656', 'u-bf703', 'u-bh162']:
+            model_pathroot = '/nesi/project/niwa00013/williamsjh/MASS/'+dataset+'/apc.pp/m01s16i222/'
+        else:
+            model_pathroot = '/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+dataset+'/'
 else:
     dataset = 'NCEP_20CRV2C'
 
+
 # Parameters
-pathroot = {'NCEP_20CRV2C': '/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/', 'u-bl658': '/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/u-bl658/','u-bb075': '/nesi/project/niwa00013/williamsjh/MASS/u-bb075/apc.pp/m01s16i222/','u-bh162': '/nesi/project/niwa00013/williamsjh/MASS/u-bh162/apc.pp/m01s16i222/','u-bd483': '/nesi/project/niwa00013/williamsjh/MASS/u-bd483/apc.pp/m01s16i222/','u-bf656': '/nesi/project/niwa00013/williamsjh/MASS/u-bf656/apc.pp/m01s16i222/','u-bc179': '/nesi/project/niwa00013/williamsjh/MASS/u-bc179/apc.pp/m01s16i222/','u-bo721': '/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/u-bo721/','u-bx226': '/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/u-bx226/','u-bw947': '/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/u-bw947/','u-bm456': '/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/u-bm456/','u-bl274': '/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/u-bl274/','u-bp908': '/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/u-bp908/','u-bn013': '/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/u-bn013/'}
-var = {'NCEP_20CRV2C': 'prmsl', 'u-bl658': 'air_pressure_at_sea_level', 'u-bb075': 'air_pressure_at_sea_level', 'u-bd483': 'air_pressure_at_sea_level', 'u-bf656': 'air_pressure_at_sea_level',  'u-bo721': 'air_pressure_at_sea_level',  'u-bx226': 'air_pressure_at_sea_level',  'u-bc179': 'air_pressure_at_sea_level',  'u-bx226': 'air_pressure_at_sea_level',  'u-bc179': 'air_pressure_at_sea_level',  'u-bw947': 'air_pressure_at_sea_level',  'u-bh162': 'air_pressure_at_sea_level',  'u-bm456': 'air_pressure_at_sea_level',  'u-bl274': 'air_pressure_at_sea_level',  'u-bp908': 'air_pressure_at_sea_level',  'u-bn013': 'air_pressure_at_sea_level'}
+pathroot = {'NCEP_20CRV2C': '/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/', dataset: model_pathroot}
+
+
+
+
+
+var = {'NCEP_20CRV2C': 'prmsl', dataset: 'air_pressure_at_sea_level'}
 
 # Generate date and hour vectors
-yearStart = {'NCEP_20CRV2C': startyear,  'u-bl658': startyear, 'u-bb075': startyear, 'u-bd483': startyear, 'u-bf656': startyear, 'u-bo721': startyear, 'u-bx226': startyear, 'u-bc179': startyear, 'u-bw947': startyear, 'u-bh162': startyear, 'u-bm456': startyear, 'u-bl274': startyear, 'u-bp908': startyear, 'u-bn013': startyear}
-yearEnd = {'NCEP_20CRV2C': startyear,  'u-bl658': startyear, 'u-bb075': startyear, 'u-bd483': startyear, 'u-bf656': startyear, 'u-bo721': startyear, 'u-bx226': startyear, 'u-bc179': startyear, 'u-bw947': startyear, 'u-bh162': startyear, 'u-bm456': startyear, 'u-bl274': startyear, 'u-bp908': startyear, 'u-bn013': startyear}
+yearStart = {'NCEP_20CRV2C': startyear,  dataset: startyear}
+
+yearEnd = {'NCEP_20CRV2C': startyear,  dataset: startyear}
 
 # Load lat, lon
 filename = {'NCEP_20CRV2C': pathroot['NCEP_20CRV2C'] + 'prmsl.' + str(yearStart['NCEP_20CRV2C']) + '.nc',
-            'u-bl658': pathroot['u-bl658'] + 'regrid-bl658a.pc' + str(yearStart['u-bl658']) + '.nc', 
-            'u-bl274': pathroot['u-bl274'] + 'regrid-bl274a.pc' + str(yearStart['u-bl274']) + '.nc', 
-            'u-bp908': pathroot['u-bp908'] + 'regrid-bp908a.pc' + str(yearStart['u-bp908']) + '.nc', 
-            'u-bn013': pathroot['u-bn013'] + 'regrid-bn013a.pc' + str(yearStart['u-bn013']) + '.nc', 
-            'u-bo721': pathroot['u-bo721'] + 'regrid-bo721a.pc' + str(yearStart['u-bo721']) + '.nc',
-            'u-bx226': pathroot['u-bx226'] + 'regrid-bx226a.pc' + str(yearStart['u-bx226']) + '.nc',
-            'u-bw947': pathroot['u-bw947'] + 'regrid-bw947a.pc' + str(yearStart['u-bw947']) + '.nc',
-            'u-bm456': pathroot['u-bm456'] + 'regrid-bm456a.pc' + str(yearStart['u-bm456']) + '.nc',
-            'u-bh162': pathroot['u-bh162'] + 'regrid-bh162a.pc' + str(yearStart['u-bh162']) + '.nc',
-            'u-bb075': pathroot['u-bb075'] + 'regrid-bb075a.pc' + str(yearStart['u-bb075']) + '.nc',
-            'u-bf656': pathroot['u-bf656'] + 'regrid-bf656a.pc' + str(yearStart['u-bf656']) + '.nc',
-            'u-bc179': pathroot['u-bc179'] + 'regrid-bc179a.pc' + str(yearStart['u-bc179']) + '.nc',
-            'u-bd483': pathroot['u-bd483'] + 'regrid-bd483a.pc' + str(yearStart['u-bd483']) + '.nc' }
+        dataset: pathroot[dataset] + 'regrid-'+dataset[2:]+'a.pc' + str(yearStart[dataset]) + '.nc'}
 fileobj = Dataset(filename[dataset], 'r')
 lon = fileobj.variables['lon'][:].astype(float)
 lat = fileobj.variables['lat'][:].astype(float)
@@ -74,19 +79,7 @@ for yr in range(yearStart[dataset], yearEnd[dataset]+1):
 
     if model_data:
 
-        filename = {'u-bl658': pathroot['u-bl658'] + 'regrid-bl658a.pc' + str(yearStart['u-bl658']) + '.nc',
-                    'u-bl274': pathroot['u-bl274'] + 'regrid-bl274a.pc' + str(yearStart['u-bl274']) + '.nc',
-                    'u-bp908': pathroot['u-bp908'] + 'regrid-bp908a.pc' + str(yearStart['u-bp908']) + '.nc',
-                    'u-bn013': pathroot['u-bn013'] + 'regrid-bn013a.pc' + str(yearStart['u-bn013']) + '.nc',
-                    'u-bo721': pathroot['u-bo721'] + 'regrid-bo721a.pc' + str(yearStart['u-bo721']) + '.nc',
-                    'u-bx226': pathroot['u-bx226'] + 'regrid-bx226a.pc' + str(yearStart['u-bx226']) + '.nc',
-                    'u-bw947': pathroot['u-bw947'] + 'regrid-bw947a.pc' + str(yearStart['u-bw947']) + '.nc',
-                    'u-bm456': pathroot['u-bm456'] + 'regrid-bm456a.pc' + str(yearStart['u-bm456']) + '.nc',
-                    'u-bh162': pathroot['u-bh162'] + 'regrid-bh162a.pc' + str(yearStart['u-bh162']) + '.nc',
-                    'u-bb075': pathroot['u-bb075'] + 'regrid-bb075a.pc' + str(yearStart['u-bb075']) + '.nc',
-                    'u-bf656': pathroot['u-bf656'] + 'regrid-bf656a.pc' + str(yearStart['u-bf656']) + '.nc',
-                    'u-bc179': pathroot['u-bc179'] + 'regrid-bc179a.pc' + str(yearStart['u-bc179']) + '.nc',
-                    'u-bd483': pathroot['u-bd483'] + 'regrid-bd483a.pc' + str(yearStart['u-bd483']) + '.nc'}
+        filename = {dataset: pathroot[dataset] + 'regrid-'+dataset[2:]+'a.pc' + str(yearStart[dataset]) + '.nc'}
 
         fileobj = Dataset(filename[dataset], 'r')
         time = unit.num2date(fileobj.variables['time'][:], 'hours since 1970-01-01 00:00:00', unit.CALENDAR_360_DAY) 
