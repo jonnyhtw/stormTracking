@@ -9,6 +9,7 @@
 #
 
 import numpy as np
+import copy
 from datetime import date
 import cf_units as unit
 from netCDF4 import Dataset
@@ -22,6 +23,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--startyear', required=True, type=int)
 parser.add_argument('--dataset', required=True, type=str)
+parser.add_argument('--model_data', action = 'store_true')
 
 args = parser.parse_args()
 
@@ -31,39 +33,40 @@ print('startyear = ', startyear)
 dataset=args.dataset
 print('dataset = ', dataset)
 
-
-
 #
 # Load in slp data and lat/lon coordinates
 
-model_data = True
+model_data = args.model_data
+
 
 if model_data:
-        if dataset in ['u-bc179', 'u-bc292', 'u-bc370', 'u-bb075', 'u-az513', 'u-az515', 'u-az524', 'u-bb277', 'u-bc470', 'u-bd288', 'u-bd416', 'u-bd483', 'u-bf647', 'u-bf656', 'u-bf703', 'u-bh162']:
-            model_pathroot = '/nesi/project/niwa00013/williamsjh/MASS/'+dataset+'/apc.pp/m01s16i222/'
-        else:
-            model_pathroot = '/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+dataset+'/'
+    if dataset in ['u-bc179', 'u-bc292', 'u-bc370', 'u-bb075', 'u-az513', 'u-az515', 'u-az524', 'u-bb277', 'u-bc470', 'u-bd288', 'u-bd416', 'u-bd483', 'u-bf647', 'u-bf656', 'u-bf703', 'u-bh162']:
+        model_pathroot = '/nesi/project/niwa00013/williamsjh/MASS/'+dataset+'/apc.pp/m01s16i222/'
+    else:
+        model_pathroot = '/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+dataset+'/'
+
+    suite = copy.deepcopy(dataset)
 else:
-    dataset = 'NCEP_20CRV2C'
+    suite = 'foo'
+    model_pathroot = 'foo'
 
 
 # Parameters
-pathroot = {'NCEP_20CRV2C': '/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/', dataset: model_pathroot}
+pathroot = {'NCEP_20CRV2C': '/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/', suite: model_pathroot, 'jra': '/nesi/project/niwa00013/williamsjh/NZESM/storm/data/jra/', 'era5': '/nesi/project/niwa00013/williamsjh/NZESM/storm/data/era5/'}
 
 
-
-
-
-var = {'NCEP_20CRV2C': 'prmsl', dataset: 'air_pressure_at_sea_level'}
+var = {'NCEP_20CRV2C': 'prmsl', suite: 'air_pressure_at_sea_level', 'jra': 'var2', 'era5': 'msl'}
 
 # Generate date and hour vectors
-yearStart = {'NCEP_20CRV2C': startyear,  dataset: startyear}
+yearStart = {'NCEP_20CRV2C': startyear,  suite: startyear, 'jra': startyear, 'era5': startyear}
 
-yearEnd = {'NCEP_20CRV2C': startyear,  dataset: startyear}
+yearEnd = {'NCEP_20CRV2C': startyear,  suite: startyear, 'jra': startyear, 'era5': startyear}
 
 # Load lat, lon
 filename = {'NCEP_20CRV2C': pathroot['NCEP_20CRV2C'] + 'prmsl.' + str(yearStart['NCEP_20CRV2C']) + '.nc',
-        dataset: pathroot[dataset] + 'regrid-'+dataset[2:]+'a.pc' + str(yearStart[dataset]) + '.nc'}
+            'jra': pathroot['jra'] + 'regrid-selhour-fcst_surf.002_prmsl.reg_tl319.' + str(yearStart['jra']) + '.nc',
+            'era5': pathroot['era5'] + 'regrid-era5-slp-'+ str(yearStart['jra']) + '.nc',
+             suite: pathroot[suite] + 'regrid-'+suite[2:]+'a.pc' + str(yearStart[suite]) + '.nc'}
 fileobj = Dataset(filename[dataset], 'r')
 lon = fileobj.variables['lon'][:].astype(float)
 lat = fileobj.variables['lat'][:].astype(float)
@@ -79,7 +82,7 @@ for yr in range(yearStart[dataset], yearEnd[dataset]+1):
 
     if model_data:
 
-        filename = {dataset: pathroot[dataset] + 'regrid-'+dataset[2:]+'a.pc' + str(yearStart[dataset]) + '.nc'}
+        filename = {suite: pathroot[suite] + 'regrid-'+suite[2:]+'a.pc' + str(yearStart[suite]) + '.nc'}
 
         fileobj = Dataset(filename[dataset], 'r')
         time = unit.num2date(fileobj.variables['time'][:], 'hours since 1970-01-01 00:00:00', unit.CALENDAR_360_DAY) 
@@ -95,11 +98,20 @@ for yr in range(yearStart[dataset], yearEnd[dataset]+1):
 
     else:
 
-        filename = {'NCEP_20CRV2C': pathroot['NCEP_20CRV2C'] + 'prmsl.' + str(yr) + '.nc'} 
+        filename = {'NCEP_20CRV2C': pathroot['NCEP_20CRV2C'] + 'prmsl.' + str(yr) + '.nc',  
+              'jra': pathroot['jra'] + 'regrid-selhour-fcst_surf.002_prmsl.reg_tl319.' + str(yr) + '.nc',
+              'era5': pathroot['era5'] + 'regrid-era5-slp-' + str(yr) + '.nc'}
 
         fileobj = Dataset(filename[dataset], 'r')
         time = fileobj.variables['time'][:]
-        time_ordinalDays = time/24. + date(1800,1,1).toordinal()
+
+        if dataset == 'NCEP_20CRV2C':
+            time_ordinalDays = time/24. + date(1800,1,1).toordinal()
+        elif dataset == 'era5':
+            time_ordinalDays = time/24. + date(1900,1,1).toordinal()
+        elif dataset == 'jra':
+            time_ordinalDays = time/24. + date(int(yr),1,1).toordinal()
+
         year = np.append(year, [date.fromordinal(np.floor(time_ordinalDays[tt]).astype(int)).year for tt in range(len(time))])
         month = np.append(month, [date.fromordinal(np.floor(time_ordinalDays[tt]).astype(int)).month for tt in range(len(time))])
         day = np.append(day, [date.fromordinal(np.floor(time_ordinalDays[tt]).astype(int)).day for tt in range(len(time))])
@@ -152,7 +164,7 @@ for tt in range(T):
         storms = storm.storms_list(lon_storms_a, lat_storms_a, amp_storms_a, lon_storms_c, lat_storms_c, amp_storms_c)
 
         if model_data:
-            np.savez('/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+dataset+'/'+dataset+'-storm_det_slp_'+str(startyear), storms=storms, year=year, month=month, day=day, hour=hour)
+            np.savez('/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+suite+'/'+suite+'-storm_det_slp_'+str(startyear), storms=storms, year=year, month=month, day=day, hour=hour)
 
         else:
-            np.savez('/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/storm_det_slp_'+str(startyear), storms=storms, year=year, month=month, day=day, hour=hour)
+            np.savez(pathroot[dataset]+'/storm_det_slp_'+str(startyear), storms=storms, year=year, month=month, day=day, hour=hour)

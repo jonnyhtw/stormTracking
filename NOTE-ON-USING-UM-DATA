@@ -30,9 +30,13 @@ To use this for UM data:
 >>>     print(file[:-3])
 >>>     iris.save(iris.load_cube(file), file[:-3]+'.nc')
 
+***If using jra data then start from here***
+
 6- Regrid to NCEP/NCAR grid, for example...
 
 for file in ?????a.pc*.nc ; do cdo remapbil,/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/prmsl.2014.nc $file regrid-$file ; done
+
+***For era5 data proceed directly the storm detection and storm tracking steps after having extracted each year using 'cdo selyear,...'***
 
 7- Combine seasonal files, for example...
 

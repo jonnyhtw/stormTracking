@@ -15,6 +15,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--startyear', required=True, type=int)
 parser.add_argument('--dataset', required=True, type=str)
+parser.add_argument('--model_data', action = 'store_true')
 
 args = parser.parse_args()
 startyear=args.startyear
@@ -27,18 +28,20 @@ print('dataset = ', dataset)
 # Automated storm tracking
 #
 
-model_data = True
+model_data = args.model_data
 
 if model_data:
-
     
     # Load in detected positions and date/hour information
     filenames = sorted(glob.glob('/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+dataset+'/'+dataset+'-storm_det_slp*'+str(startyear)+'*'))
 
 else:
     #ncep
-
-    filenames = sorted(glob.glob('/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/storm_det_slp*'))
+    if dataset == 'NCEP_20CRV2C':
+        filenames = sorted(glob.glob('/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/storm_det_slp*'))
+    #jra
+    if dataset == 'jra':
+        filenames = sorted(glob.glob('/nesi/project/niwa00013/williamsjh/NZESM/storm/data/jra/storm_det_slp*'+str(startyear)+'*'))
 
 firstiteration = True
 
@@ -89,6 +92,10 @@ storms = storm.strip_storms(storms, dt=6, d_tot_min=0., d_ratio=0., dur_min=12)
 
 if model_data:
     np.savez('/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+dataset+'/'+dataset+'-storm_track_slp'+'_'+str(startyear), storms=storms)
+
 else:
-    np.savez('/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/storm_track_slp', storms=storms)
+    if dataset == 'NCEP_20CRV2C':
+        np.savez('/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/storm_track_slp', storms=storms)
+    if dataset == 'jra':
+        np.savez('/nesi/project/niwa00013/williamsjh/NZESM/storm/data/jra/storm_track_slp'+'_'+str(startyear), storms=storms)
 
