@@ -15,7 +15,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--startyear', required=True, type=int)
 parser.add_argument('--dataset', required=True, type=str)
-parser.add_argument('--model_data', action = 'store_true')
+parser.add_argument('--model_data',required=True, type=bool)
 
 args = parser.parse_args()
 startyear=args.startyear
@@ -42,6 +42,9 @@ else:
     #jra
     if dataset == 'jra':
         filenames = sorted(glob.glob('/nesi/project/niwa00013/williamsjh/NZESM/storm/data/jra/storm_det_slp*'+str(startyear)+'*'))
+        #era5
+    if dataset == 'era5':
+        filenames = sorted(glob.glob('/nesi/project/niwa00013/williamsjh/NZESM/storm/data/era5/storm_det_slp*'+str(startyear)+'*'))
 
 firstiteration = True
 
@@ -98,4 +101,6 @@ else:
         np.savez('/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/storm_track_slp', storms=storms)
     if dataset == 'jra':
         np.savez('/nesi/project/niwa00013/williamsjh/NZESM/storm/data/jra/storm_track_slp'+'_'+str(startyear), storms=storms)
+    if dataset == 'era5':
+        np.savez('/nesi/project/niwa00013/williamsjh/NZESM/storm/data/era5/storm_track_slp'+'_'+str(startyear), storms=storms)
 

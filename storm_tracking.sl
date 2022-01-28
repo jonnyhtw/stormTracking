@@ -10,12 +10,12 @@
 ##SBATCH --mem-per-cpu=200G
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --array=1989-2008
+#SBATCH --array=2080-2099
 
 export PATH=/nesi/nobackup/niwa00013/williamsjh/miniconda3/bin:$PATH
 
 source activate master
 
-export dataset='jra'
+export dataset='u-bh807'
 
-/nesi/nobackup/niwa00013/williamsjh/miniconda3/envs/master/bin/python  -u storm_tracking.py --startyear=$SLURM_ARRAY_TASK_ID --dataset=$dataset
+/nesi/nobackup/niwa00013/williamsjh/miniconda3/envs/master/bin/python  -u storm_tracking.py --startyear=$SLURM_ARRAY_TASK_ID --dataset=$dataset --model_data=True
