@@ -20,7 +20,7 @@ export PATH=/nesi/nobackup/niwa00013/williamsjh/miniconda3/bin:$PATH
 
 source activate master
 
-export dataset='u-bh807'
+export dataset='u-bp939'
 
 mkdir -p /nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/$dataset
 

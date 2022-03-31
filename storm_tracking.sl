@@ -16,6 +16,6 @@ export PATH=/nesi/nobackup/niwa00013/williamsjh/miniconda3/bin:$PATH
 
 source activate master
 
-export dataset='u-bh807'
+export dataset='u-bp939'
 
 /nesi/nobackup/niwa00013/williamsjh/miniconda3/envs/master/bin/python  -u storm_tracking.py --startyear=$SLURM_ARRAY_TASK_ID --dataset=$dataset --model_data=True
