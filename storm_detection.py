@@ -40,7 +40,7 @@ model_data = args.model_data
 
 
 if model_data:
-    if dataset in ['u-bc179', 'u-bc292', 'u-bc370', 'u-bb075', 'u-az513', 'u-az515', 'u-az524', 'u-bb277', 'u-bc470', 'u-bd288', 'u-bd416', 'u-bd483', 'u-bf647', 'u-bf656', 'u-bf703', 'u-bh162','u-bh409','u-bi805','u-be509','u-be537','u-be647','u-be653','u-bh570','u-bh716','u-bh210','u-bh807','u-be693','u-be686','u-be392','u-be396']:
+    if dataset in ['u-bc179', 'u-bc292', 'u-bc370', 'u-bb075', 'u-az513', 'u-az515', 'u-az524', 'u-bb277', 'u-bc470', 'u-bd288', 'u-bd416', 'u-bd483', 'u-bf647', 'u-bf656', 'u-bf703', 'u-bh162','u-bh409','u-bi805','u-be509','u-be537','u-be647','u-be653','u-bh570','u-bh716','u-bh210','u-bh807','u-be693','u-be686','u-be392','u-be396','u-be679','u-be682','u-be683','u-be606','u-be684','u-be690','u-be393','u-be397','u-be394','u-be398','u-be335','u-be395']:
         model_pathroot = '/nesi/project/niwa00013/williamsjh/MASS/'+dataset+'/apc.pp/m01s16i222/'
     else:
         model_pathroot = '/nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/'+dataset+'/'
@@ -71,7 +71,8 @@ filename = {'NCEP_20CRV2C': pathroot['NCEP_20CRV2C'] + 'prmsl.' + str(yearStart[
 print('dataset=',dataset)
 print('pathroot=',pathroot)
 print('model_data=',model_data)
-print('filename=',filename)
+print('filename=',filename[dataset])
+print('suite=',suite)
 
 fileobj = Dataset(filename[dataset], 'r')
 lon = fileobj.variables['lon'][:].astype(float)

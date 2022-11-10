@@ -14,18 +14,12 @@
 #SBATCH --ntasks=1
 #SBATCH --array=2080-2099
 
-#rm storm_detection.{out,err}
-
 export PATH=/nesi/nobackup/niwa00013/williamsjh/miniconda3/bin:$PATH
 
 source activate master
 
-export dataset='u-bp939'
+export dataset='u-be395'
 
 mkdir -p /nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/$dataset
-
-#mkdir -p /nesi/project/niwa00013/williamsjh/NZESM/storm/model-data/$dataset
-
-
 
 /nesi/nobackup/niwa00013/williamsjh/miniconda3/envs/master/bin/python -u storm_detection.py --startyear=$SLURM_ARRAY_TASK_ID --dataset=$dataset --model_data=True
