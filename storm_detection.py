@@ -37,6 +37,9 @@ print('dataset = ', dataset)
 # Load in slp data and lat/lon coordinates
 
 model_data = args.model_data
+model_data = False
+
+print('model_data=',model_data)
 
 
 if model_data:
@@ -50,6 +53,10 @@ else:
     suite = 'foo'
     model_pathroot = 'foo'
 
+#if model_data == False:
+#    del suite
+
+print('suite=',suite)
 
 # Parameters
 pathroot = {'NCEP_20CRV2C': '/nesi/project/niwa00013/williamsjh/NZESM/storm/data/NCEP/20CRv2c/prmsl/6hourly/', suite: model_pathroot, 'jra': '/nesi/project/niwa00013/williamsjh/NZESM/storm/data/jra/', 'era5': '/nesi/project/niwa00013/williamsjh/NZESM/storm/data/era5/'}

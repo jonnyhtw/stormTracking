@@ -29,6 +29,7 @@ print('dataset = ', dataset)
 #
 
 model_data = args.model_data
+model_data = False
 
 if model_data:
     
